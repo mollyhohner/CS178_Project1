@@ -1,5 +1,5 @@
-import pymysql
-import pymysql.cursors
+#import pymysql
+#import pymysql.cursors
 import creds
 import boto3
 
