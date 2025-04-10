@@ -21,3 +21,10 @@ def execute_query(query, args=()):
     rows = cur.fetchall()
     cur.close()
     return rows
+'''
+def get_list_of_dictionaries(category):
+    rows = execute_query(""" SELECT *
+                         FROM 
+                         
+                         """)
+'''

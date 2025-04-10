@@ -20,8 +20,15 @@ app.secret_key = 'your_secret_key' # this is an artifact for using flash display
 
 @app.route('/')
 def home():
+    query = """
+        SELECT Name, Continent, Population
+        FROM Country
+        ORDER BY Population DESC
+        LIMIT 10;   
+    """
+    countries = execute_query(query)
     return render_template('home.html')
-
+'''
 @app.route('/add-user', methods=['GET', 'POST'])
 def add_user():
     if request.method == 'POST':
@@ -67,7 +74,7 @@ def delete_user():
     else:
         # Render the form page if the request method is GET
         return render_template('delete_user.html')
-
+'''
 
 
 # these two lines of code should always be the last in the file
