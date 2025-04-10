@@ -21,13 +21,14 @@ app.secret_key = 'your_secret_key' # this is an artifact for using flash display
 @app.route('/')
 def home():
     query = """
-        SELECT *
+        SELECT name, continent, population
         FROM country
-        LIMIT 5;   
+        ORDER BY population DESC
+        LIMIT 10;   
     """
     countries = execute_query(query)
     print("Query Results:", countries)
-    return render_template('home.html')
+    return render_template('home.html', results=countries)
 
 '''
 @app.route('/add-user', methods=['GET', 'POST'])
