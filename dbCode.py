@@ -12,11 +12,13 @@ def get_conn():
         user= creds.user,
         password = creds.password,
         db=creds.db,
+        cursorclass=pymysql.cursors.DictCursor
     )
     return conn
 
 def execute_query(query, args=()):
-    cur = get_conn.cursor(pymysql.cursors.DictCursor)
+    conn = get_conn()
+    cur = conn.cursor()
     cur.execute(query, args)
     rows = cur.fetchall()
     cur.close()
