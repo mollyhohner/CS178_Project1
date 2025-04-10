@@ -1,14 +1,18 @@
 from flask import Flask
 from flask import render_template
 from flask import Flask, render_template, request, redirect, url_for, flash
+from dbCode import *
+'''
+# get items_list
+items_list = get_list_of_dictionaries(category)
+return render_template('display_items.html', items=items_list)
 
 app = Flask(__name__)
-
 @app.route('/')
 def hello():
     return '<h1>Hello from Flask!</h1>'
-
 '''
+
 app = Flask(__name__)
 app.secret_key = 'your_secret_key' # this is an artifact for using flash displays; 
                                    # it is required, but you can leave this alone
@@ -65,7 +69,7 @@ def delete_user():
         return render_template('delete_user.html')
 
 
-'''
+
 # these two lines of code should always be the last in the file
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8080, debug=True)
