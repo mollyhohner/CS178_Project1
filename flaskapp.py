@@ -6,11 +6,6 @@ from dbCode import *
 # get items_list
 items_list = get_list_of_dictionaries(category)
 return render_template('display_items.html', items=items_list)
-
-app = Flask(__name__)
-@app.route('/')
-def hello():
-    return '<h1>Hello from Flask!</h1>'
 '''
 
 app = Flask(__name__)
@@ -27,21 +22,20 @@ def home():
         LIMIT 10;   
     """
     countries = execute_query(query)
-    print("Query Results:", countries)
     return render_template('home.html', results=countries)
 
 '''
-@app.route('/add-user', methods=['GET', 'POST'])
+@app.route('/add-country', methods=['GET', 'POST'])
 def add_user():
     if request.method == 'POST':
         # Extract form data
         first_name = request.form['first name']
         last_name = request.form['last name']
-        genre = request.form['genre']
+        country = request.form['country']
         
         # Process the data (e.g., add it to a database)
         # For now, let's just print it to the console
-        print("First Name:", first_name, ":", "Last Name:", last_name, ":", "Favorite Genre:", genre)
+        print("First Name:", first_name, ":", "Last Name:", last_name, ":", "Country:", country)
         
         flash('User added successfully!', 'success')  # 'success' is a category; makes a green banner at the top
         # Redirect to home page or another page upon successful submission
@@ -53,6 +47,7 @@ def add_user():
 
 @app.route('/display-users')
 def display_users():
+    ######## THIS NEEDS TO BE UPDATED ############
     # hard code a value to the users_list;
     # note that this could have been a result from an SQL query :) 
     users_list = (('John','Doe','Comedy'),('Jane', 'Doe','Drama'))
