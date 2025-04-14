@@ -30,12 +30,18 @@ def add_user():
     if request.method == 'POST':
         # Extract form data
         first_name = request.form['first name']
+        session['username'] = first_name
         last_name = request.form['last name']
-        country = request.form['country']
-        
+        city = request.form['city']
+        user = {
+            'First Name': first_name,
+            'Last Name': last_name,
+            'City': city
+        }
+        table.put_item(Item=user)
         # Process the data (e.g., add it to a database)
         # For now, let's just print it to the console
-        print("First Name:", first_name, ":", "Last Name:", last_name, ":", "Country:", country)
+        print("First Name:", first_name, ":", "Last Name:", last_name, ":", "City:", city)
         
         flash('User added successfully!', 'success')  # 'success' is a category; makes a green banner at the top
         # Redirect to home page or another page upon successful submission
@@ -46,10 +52,9 @@ def add_user():
 
 @app.route('/display-users')
 def display_users():
-    user_list ={"First Name":session['first_name']}
-      
-    users_list = (('John','Doe','Comedy'),('Jane', 'Doe','Drama'))
-    return render_template('display_users.html', users = user_list)
+    key ={"First Name":session['first_name']}
+    response = table.get_item(Key=key)
+    return render_template('display_users.html', users = key)
 
 
 @app.route('/delete-user', methods=['GET', 'POST'])
@@ -68,6 +73,30 @@ def delete_user():
     else:
         # Render the form page if the request method is GET
         return render_template('delete_user.html')
+
+
+@app.route('/update-user', methods=['GET', 'POST'])
+def update_user():
+    if request.method == 'POST':
+        # Extract form data
+        first_name = request.form['first name']
+        session['username'] = first_name
+        last_name = request.form['last name']
+        city = request.form['city']
+        table.update_item(
+            key ={"First Name":session['first_name']}
+            UpdateExpression = "SET city = list_append(city, :r)",
+                ExpressionAttributeValues = {':r': [city],})
+        # Process the data (e.g., add it to a database)
+        # For now, let's just print it to the console
+        print("First Name:", first_name, ":", "Last Name:", last_name, ":", "City:", city)
+        
+        flash('User added successfully!', 'success')  # 'success' is a category; makes a green banner at the top
+        # Redirect to home page or another page upon successful submission
+        return redirect(url_for('home'))
+    else:
+        # Render the form page if the request method is GET
+        return render_template('add_user.html')
 
 
 

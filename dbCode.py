@@ -3,6 +3,10 @@ import pymysql.cursors
 import creds
 import boto3
 
+TABLE_NAME = "ProjectOne"
+dynamodb = boto3.resource('dynamodb', region_name="us-east-1")
+table = dynamodb.Table(TABLE_NAME)
+
 #Lab 13
 # Section 1: MySQL
 
@@ -25,8 +29,8 @@ def execute_query(query, args=()):
     return rows
 '''
 def get_list_of_dictionaries(category):
-    rows = execute_query(""" SELECT *
-                         FROM 
-                         
+    rows = execute_query(""" SELECT city.name AS city_name, country.name AS country_name
+                         FROM city
+                         JOIN country ON city.countrycode = country.countrycode;
                          """)
 '''
