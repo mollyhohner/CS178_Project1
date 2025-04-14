@@ -1,6 +1,6 @@
 from flask import Flask
 from flask import render_template
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for, flash, session
 from dbCode import *
 '''
 # get items_list
@@ -46,11 +46,10 @@ def add_user():
 
 @app.route('/display-users')
 def display_users():
-    ######## THIS NEEDS TO BE UPDATED ############
-    # hard code a value to the users_list;
-    # note that this could have been a result from an SQL query :) 
+    user_list ={"First Name":session['first_name']}
+      
     users_list = (('John','Doe','Comedy'),('Jane', 'Doe','Drama'))
-    return render_template('display_users.html', users = users_list)
+    return render_template('display_users.html', users = user_list)
 
 
 @app.route('/delete-user', methods=['GET', 'POST'])
