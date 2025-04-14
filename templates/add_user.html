@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Add New User</title>
+</head>
+<body>
+    <h1>Add New Country to Visit</h1>
+    <form action="{{ url_for('add_user') }}" method="post">
+        <label for="first name">First Name:</label><br>
+        <input type="text" id="first name" first_name="first name" required><br>
+        <label for="last name">Last Name:</label><br>
+        <input type="text" id="last name" last_name="last name" required><br>
+        <label for="country">Country:</label><br>
+        <input type="text" id="country" name="country" required><br>
+        <input type="submit" value="Submit">
+    </form>
+</body>
+</html>

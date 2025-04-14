@@ -24,8 +24,8 @@ def home():
     countries = execute_query(query)
     return render_template('home.html', results=countries)
 
-'''
-@app.route('/add-country', methods=['GET', 'POST'])
+
+@app.route('/add-user', methods=['GET', 'POST'])
 def add_user():
     if request.method == 'POST':
         # Extract form data
@@ -44,7 +44,6 @@ def add_user():
         # Render the form page if the request method is GET
         return render_template('add_user.html')
 
-
 @app.route('/display-users')
 def display_users():
     ######## THIS NEEDS TO BE UPDATED ############
@@ -58,12 +57,11 @@ def display_users():
 def delete_user():
     if request.method == 'POST':
         # Extract form data
-        name = request.form['name']
-
+        first_name = request.form['first name']
+        last_name = request.form['last name']
         
-        # Process the data (e.g., add it to a database)
-        # For now, let's just print it to the console
-        print("Name:", name)
+
+        print("Name:", first_name, last_name)
         
         flash('User deleted successfully!', 'warning')  # options include: success, error, warning, info
         # Redirect to home page or another page upon successful submission
@@ -71,7 +69,7 @@ def delete_user():
     else:
         # Render the form page if the request method is GET
         return render_template('delete_user.html')
-'''
+
 
 
 # these two lines of code should always be the last in the file
