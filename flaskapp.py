@@ -29,14 +29,14 @@ def home():
 def add_user():
     if request.method == 'POST':
         # Extract form data
-        first_name = request.form['first name']
-        session['username'] = first_name
-        last_name = request.form['last name']
+        first_name = request.form.get('first_name')
+        #session['username'] = first_name
+        last_name = request.form.get('last_name')
         city = request.form['city']
         user = {
-            'First Name': first_name,
-            'Last Name': last_name,
-            'City': city
+            'first_name': first_name,
+            'last_name': last_name,
+            'city': city
         }
         table.put_item(Item=user)
         # Process the data (e.g., add it to a database)
@@ -79,14 +79,14 @@ def delete_user():
 def update_user():
     if request.method == 'POST':
         # Extract form data
-        first_name = request.form['first name']
+        first_name = request.form['firstname']
         session['username'] = first_name
-        last_name = request.form['last name']
+        last_name = request.form['lastname']
         city = request.form['city']
         table.update_item(
-            key ={"First Name":session['first_name']}
+            key ={"first_name":first_name},
             UpdateExpression = "SET city = list_append(city, :r)",
-                ExpressionAttributeValues = {':r': [city],})
+            ExpressionAttributeValues = {':r': [city],})
         # Process the data (e.g., add it to a database)
         # For now, let's just print it to the console
         print("First Name:", first_name, ":", "Last Name:", last_name, ":", "City:", city)

@@ -33,4 +33,5 @@ def get_list_of_dictionaries(category):
                          FROM city
                          JOIN country ON city.countrycode = country.countrycode;
                          """)
+    return rows
 '''
