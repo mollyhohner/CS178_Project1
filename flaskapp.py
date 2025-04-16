@@ -63,17 +63,36 @@ def delete_user():
     if request.method == 'POST':
         # Extract form data
         Username = request.form.get('Username')
+
+        if not Username:
+            flash("Username is required to delete a user."),
+            return redirect(url_for('delete_user'))
+    
+        try:
+            response = table.get_item(Key={'Username':Username})
+
+            if 'Item' not in response:
+                flash(f"User '{Username}' not found.", 'error')
+                return redirect(url_for('delete_user'))
+
+            # Proceed with delete
+            table.delete_item(Key={'Username': Username})
+            flash(f"User '{Username}' deleted successfully!", 'warning')
+
+        except Exception as e:
+            flash(f"Error deleting user: {str(e)}", "error")
+
+        '''      
         # Delete user from database
         if Username:
             table.delete_item(Key={'Username': Username})
-        flash('User deleted successfully!', 'warning')  # options include: success, error, warning, info
+        flash('User deleted successfully!', 'warning')  # options include: success, error, warning, info'''
         # Redirect to home page or another page upon successful submission
         return redirect(url_for('home'))
-    else:
-        # Render the form page if the request method is GET
-        return render_template('delete_user.html')
+    # Render the form page if the request method is GET
+    return render_template('delete_user.html')
 
-
+print(table.key_schema)
 @app.route('/update-user', methods=['GET', 'POST'])
 def update_user():
     if request.method == 'POST':
