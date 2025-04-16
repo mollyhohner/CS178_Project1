@@ -29,19 +29,16 @@ def home():
 def add_user():
     if request.method == 'POST':
         # Extract form data
-        first_name = request.form.get('first_name')
-        #session['username'] = first_name
-        last_name = request.form.get('last_name')
-        city = request.form['city']
+        Username = request.form.get('Username')
+        City = request.form['City']
         user = {
-            'first_name': first_name,
-            'last_name': last_name,
-            'city': city
+            'Username': Username,
+            'City': City
         }
         table.put_item(Item=user)
         # Process the data (e.g., add it to a database)
         # For now, let's just print it to the console
-        print("First Name:", first_name, ":", "Last Name:", last_name, ":", "City:", city)
+        print("Username:", Username, ":", "City:", City)
         
         flash('User added successfully!', 'success')  # 'success' is a category; makes a green banner at the top
         # Redirect to home page or another page upon successful submission
@@ -52,7 +49,7 @@ def add_user():
 
 @app.route('/display-users')
 def display_users():
-    key ={"First Name":session['first_name']}
+    key ={"Username":session['Username']}
     response = table.get_item(Key=key)
     return render_template('display_users.html', users = key)
 
@@ -61,12 +58,9 @@ def display_users():
 def delete_user():
     if request.method == 'POST':
         # Extract form data
-        first_name = request.form['first name']
-        last_name = request.form['last name']
-        
+        Username = request.form['Username']
 
-        print("Name:", first_name, last_name)
-        
+        print("Username:", Username)
         flash('User deleted successfully!', 'warning')  # options include: success, error, warning, info
         # Redirect to home page or another page upon successful submission
         return redirect(url_for('home'))
@@ -79,17 +73,15 @@ def delete_user():
 def update_user():
     if request.method == 'POST':
         # Extract form data
-        first_name = request.form['firstname']
-        session['username'] = first_name
-        last_name = request.form['lastname']
-        city = request.form['city']
+        Username = request.form['Username']
+        City = request.form['City']
         table.update_item(
-            key ={"first_name":first_name},
-            UpdateExpression = "SET city = list_append(city, :r)",
-            ExpressionAttributeValues = {':r': [city],})
+            key ={"Username":Username},
+            UpdateExpression = "SET City = list_append(City, :r)",
+            ExpressionAttributeValues = {':r': [City],})
         # Process the data (e.g., add it to a database)
         # For now, let's just print it to the console
-        print("First Name:", first_name, ":", "Last Name:", last_name, ":", "City:", city)
+        print("Username:", Username, ":", "City:", City)
         
         flash('User added successfully!', 'success')  # 'success' is a category; makes a green banner at the top
         # Redirect to home page or another page upon successful submission
