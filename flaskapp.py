@@ -29,18 +29,18 @@ def home():
 def add_user():
     if request.method == 'POST':
         # Extract form data
-        Username = request.form.get('Username')
+        Username = request.form['Username']
         City = request.form['City']
         user = {
             'Username': Username,
             'City': City
         }
-        table.put_item(Item=user)
         # Process the data (e.g., add it to a database)
-        # For now, let's just print it to the console
-        print("Username:", Username, ":", "City:", City)
-        
-        flash('User added successfully!', 'success')  # 'success' is a category; makes a green banner at the top
+        table.put_item(Item=user)
+        print(f"DEBUG: Username = {Username}, City = {City}")
+
+        flash('User added successfully!', 'success') 
+
         # Redirect to home page or another page upon successful submission
         return redirect(url_for('home'))
     else:
@@ -49,18 +49,23 @@ def add_user():
 
 @app.route('/display-users')
 def display_users():
-    key ={"Username":session['Username']}
-    response = table.get_item(Key=key)
-    return render_template('display_users.html', users = key)
+    try:
+        response = table.scan()
+        users = response.get('Items', [])
+    except Exception as e:
+        flash(f"Error fetching users: {str(e)}", "error")
+        users = []
 
+    return render_template('display_users.html', users=users)
 
 @app.route('/delete-user', methods=['GET', 'POST'])
 def delete_user():
     if request.method == 'POST':
         # Extract form data
-        Username = request.form['Username']
-
-        print("Username:", Username)
+        Username = request.form.get('Username')
+        # Delete user from database
+        if Username:
+            table.delete_item(Key={'Username': Username})
         flash('User deleted successfully!', 'warning')  # options include: success, error, warning, info
         # Redirect to home page or another page upon successful submission
         return redirect(url_for('home'))
