@@ -27,11 +27,3 @@ def execute_query(query, args=()):
     rows = cur.fetchall()
     cur.close()
     return rows
-'''
-def get_list_of_dictionaries(category):
-    rows = execute_query(""" SELECT city.name AS city_name, country.name AS country_name
-                         FROM city
-                         JOIN country ON city.countrycode = country.countrycode;
-                         """)
-    return rows
-'''

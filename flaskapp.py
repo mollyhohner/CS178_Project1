@@ -42,7 +42,7 @@ def add_user():
         flash('User added successfully!', 'success') 
 
         # Redirect to home page or another page upon successful submission
-        return redirect(url_for('home'))
+        return redirect(url_for('city_country'))
     else:
         # Render the form page if the request method is GET
         return render_template('add_user.html')
@@ -92,7 +92,7 @@ def delete_user():
     # Render the form page if the request method is GET
     return render_template('delete_user.html')
 
-print(table.key_schema)
+
 @app.route('/update-user', methods=['GET', 'POST'])
 def update_user():
     if request.method == 'POST':
@@ -114,6 +114,28 @@ def update_user():
         # Render the form page if the request method is GET
         return render_template('add_user.html')
 
+@app.route('/city-country', methods=['GET', 'POST'])
+def city_country():
+    country_name = None
+
+    if request.method == 'POST':
+        city_input = request.form.get('City', '').strip()
+
+        query = """
+            SELECT country.name
+            FROM city
+            JOIN country ON city.countrycode = country.code
+            WHERE city.name = %s
+            LIMIT 1;
+        """
+        result = execute_query(query, (city_input,))
+
+        if result and len(result) > 0:
+            country_name = result[0]['name']
+        else:
+            flash("City not found in the database.", "error")
+
+    return render_template('city_country.html', country=country_name)
 
 
 # these two lines of code should always be the last in the file

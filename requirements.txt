@@ -1,3 +1,10 @@
 Flask
 pymysql
 boto3
+render_template
+request
+redirect
+url_for
+flash
+session
+dbCode

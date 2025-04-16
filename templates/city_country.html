@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>City to Country</title>
+</head>
+<body>
+    <h1>Find the Country the City is in!</h1>
+
+    <form method="post" action="{{ url_for('city_country') }}">
+        <label for="City">Enter the City:</label>
+        <input type="text" id="City" name="City" required>
+        <button type="submit">Find Country</button>
+    </form>
+    
+    {% if country %}
+        <h3>The city is in: {{ country }}</h3>
+    {% endif %}
+</body>
+</html>
