@@ -6,22 +6,7 @@
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-    <h1 style="text-align:center;">Top 10 Most Populated Countries</h1>
-    <table>
-        <tr>
-            <th>Country</th>
-            <th>Continent</th>
-            <th>Population</th>
-        </tr>
-        {% for row in results %}
-        <tr>
-            <td>{{ row['name'] }}</td>
-            <td>{{ row['continent'] }}</td>
-            <td>{{ row['population']}}</td>
-        </tr>
-        {% endfor %}
-    </table>
-    <h2 style="text-align:center;">Find which cities you should visit next!</h2>
+    <h1 style="text-align:center;">Make a Travel Profile!</h1>
     <!-- display a flash message here, if necessary -->
     {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
