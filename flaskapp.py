@@ -63,7 +63,19 @@ def delete_user():
     if request.method == 'POST':
         # Extract form data
         Username = request.form.get('Username')
+        try:
+            response = table.delete_item(Key={'Username': Username})
+            print("User deleted:", response)
 
+            flash('User deleted successfully!', 'success') 
+            return redirect(url_for('home'))
+        except Exception as e:
+            print("Error deleting user from DynamoDB:", e)
+            flash('Error deleting user. Please try again.', 'error')
+            return redirect(url_for('delete_user'))
+    else:
+        return render_template('delete_user.html')
+'''
         if not Username:
             flash("Username is required to delete a user."),
             return redirect(url_for('delete_user'))
@@ -82,15 +94,15 @@ def delete_user():
         except Exception as e:
             flash(f"Error deleting user: {str(e)}", "error")
 
-        '''      
+            
         # Delete user from database
         if Username:
             table.delete_item(Key={'Username': Username})
-        flash('User deleted successfully!', 'warning')  # options include: success, error, warning, info'''
+        flash('User deleted successfully!', 'warning')  # options include: success, error, warning, info
         # Redirect to home page or another page upon successful submission
         return redirect(url_for('home'))
     # Render the form page if the request method is GET
-    return render_template('delete_user.html')
+    return render_template('delete_user.html')'''
 
 
 @app.route('/update-user', methods=['GET', 'POST'])
