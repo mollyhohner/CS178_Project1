@@ -112,7 +112,7 @@ def update_user():
         return redirect(url_for('home'))
     else:
         # Render the form page if the request method is GET
-        return render_template('add_user.html')
+        return render_template('update_user.html')
 
 @app.route('/city-country', methods=['GET', 'POST'])
 def city_country():
