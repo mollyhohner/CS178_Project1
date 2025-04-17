@@ -100,14 +100,15 @@ def update_user():
         Username = request.form['Username']
         City = request.form['City']
         table.update_item(
-            key ={"Username":Username},
-            UpdateExpression = "SET City = list_append(City, :r)",
-            ExpressionAttributeValues = {':r': [City],})
+            Key ={"Username": Username},
+            UpdateExpression = "SET City = :new_city",
+            ExpressionAttributeValues = {':new_city': City})
+        
         # Process the data (e.g., add it to a database)
         # For now, let's just print it to the console
         print("Username:", Username, ":", "City:", City)
         
-        flash('User added successfully!', 'success')  # 'success' is a category; makes a green banner at the top
+        flash('User city changed successfully!', 'success')  # 'success' is a category; makes a green banner at the top
         # Redirect to home page or another page upon successful submission
         return redirect(url_for('home'))
     else:

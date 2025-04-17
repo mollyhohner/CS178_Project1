@@ -7,9 +7,7 @@ TABLE_NAME = "ProjectOne"
 dynamodb = boto3.resource('dynamodb', region_name="us-east-1")
 table = dynamodb.Table(TABLE_NAME)
 
-#Lab 13
-# Section 1: MySQL
-
+# Connect to the 
 def get_conn():
     conn = pymysql.connect(
         host= creds.host,
