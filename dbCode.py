@@ -7,7 +7,7 @@ TABLE_NAME = "ProjectOne"
 dynamodb = boto3.resource('dynamodb', region_name="us-east-1")
 table = dynamodb.Table(TABLE_NAME)
 
-# Connect to the 
+# Connect to the RDS Instance
 def get_conn():
     conn = pymysql.connect(
         host= creds.host,

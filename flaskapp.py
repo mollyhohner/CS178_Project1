@@ -12,19 +12,12 @@ app = Flask(__name__)
 app.secret_key = 'your_secret_key' # this is an artifact for using flash displays; 
                                    # it is required, but you can leave this alone
 
-
+# Home page
 @app.route('/')
 def home():
-    query = """
-        SELECT name, continent, population
-        FROM country
-        ORDER BY population DESC
-        LIMIT 10;   
-    """
-    countries = execute_query(query)
-    return render_template('home.html', results=countries)
+    return render_template('home.html')
 
-
+# Add user to database
 @app.route('/add-user', methods=['GET', 'POST'])
 def add_user():
     if request.method == 'POST':
@@ -38,10 +31,9 @@ def add_user():
         # Process the data (e.g., add it to a database)
         table.put_item(Item=user)
         print(f"DEBUG: Username = {Username}, City = {City}")
-
         flash('User added successfully!', 'success') 
 
-        # Redirect to home page or another page upon successful submission
+        # Redirect to city_country upon successful submission
         return redirect(url_for('city_country'))
     else:
         # Render the form page if the request method is GET
@@ -50,12 +42,13 @@ def add_user():
 @app.route('/display-users')
 def display_users():
     try:
+        # Gather data in the table
         response = table.scan()
         users = response.get('Items', [])
     except Exception as e:
+        # If there is no one in the table, flash error
         flash(f"Error fetching users: {str(e)}", "error")
         users = []
-
     return render_template('display_users.html', users=users)
 
 @app.route('/delete-user', methods=['GET', 'POST'])
@@ -64,46 +57,19 @@ def delete_user():
         # Extract form data
         Username = request.form.get('Username')
         try:
+            # Process the data (e.g., delete it to a database)
             response = table.delete_item(Key={'Username': Username})
             print("User deleted:", response)
-
             flash('User deleted successfully!', 'success') 
+            # Return to home if successful
             return redirect(url_for('home'))
         except Exception as e:
             print("Error deleting user from DynamoDB:", e)
             flash('Error deleting user. Please try again.', 'error')
+            # Redirect to delete_user if username not found
             return redirect(url_for('delete_user'))
     else:
         return render_template('delete_user.html')
-'''
-        if not Username:
-            flash("Username is required to delete a user."),
-            return redirect(url_for('delete_user'))
-    
-        try:
-            response = table.get_item(Key={'Username':Username})
-
-            if 'Item' not in response:
-                flash(f"User '{Username}' not found.", 'error')
-                return redirect(url_for('delete_user'))
-
-            # Proceed with delete
-            table.delete_item(Key={'Username': Username})
-            flash(f"User '{Username}' deleted successfully!", 'warning')
-
-        except Exception as e:
-            flash(f"Error deleting user: {str(e)}", "error")
-
-            
-        # Delete user from database
-        if Username:
-            table.delete_item(Key={'Username': Username})
-        flash('User deleted successfully!', 'warning')  # options include: success, error, warning, info
-        # Redirect to home page or another page upon successful submission
-        return redirect(url_for('home'))
-    # Render the form page if the request method is GET
-    return render_template('delete_user.html')'''
-
 
 @app.route('/update-user', methods=['GET', 'POST'])
 def update_user():
@@ -111,14 +77,11 @@ def update_user():
         # Extract form data
         Username = request.form['Username']
         City = request.form['City']
+        # Process the data (e.g. update city in the database)
         table.update_item(
             Key ={"Username": Username},
             UpdateExpression = "SET City = :new_city",
             ExpressionAttributeValues = {':new_city': City})
-        
-        # Process the data (e.g., add it to a database)
-        # For now, let's just print it to the console
-        print("Username:", Username, ":", "City:", City)
         
         flash('User city changed successfully!', 'success')  # 'success' is a category; makes a green banner at the top
         # Redirect to home page or another page upon successful submission
@@ -133,7 +96,7 @@ def city_country():
 
     if request.method == 'POST':
         city_input = request.form.get('City', '').strip()
-
+        # Query to find the country a city is in
         query = """
             SELECT country.name
             FROM city
